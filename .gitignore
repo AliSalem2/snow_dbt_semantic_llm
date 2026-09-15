@@ -3,6 +3,7 @@
 .env
 *.p8
 *.pem
+.kaggle/
 
 # data
 data/raw/*
@@ -16,3 +17,4 @@ target/
 dbt_packages/
 logs/
 .user.yml
+.kaggle/
