@@ -23,9 +23,14 @@ models:
     description: >
       One row per order with value, payment, delivery performance and the
       latest review score. Main input for the semantic layer.
+    semantic_model: true
+    agg_time_dimension: purchase_date
     columns:
       - name: order_id
         data_tests: [unique, not_null]
+        entity:
+          type: primary
+          name: olist_order
       - name: customer_id
         data_tests:
           - not_null
@@ -35,14 +40,102 @@ models:
                 field: customer_id
       - name: purchase_date
         data_tests: [not_null]
+        granularity: day
+        dimension:
+          type: time
       - name: order_value
         description: Item prices plus freight.
       - name: payment_value
         description: Sum of all payment lines. Can differ slightly from order_value (vouchers, interest).
       - name: delivery_days
         description: Days from purchase to delivery. Null if not delivered.
+
+      - name: customer_unique_id
+        entity:
+          type: foreign
+          name: customer
+      - name: order_status
+        dimension:
+          type: categorical
+      - name: customer_state
+        dimension:
+          type: categorical
       - name: is_delivered_late
         description: Delivered after the estimated date. Null if not delivered.
+        dimension:
+          type: categorical
+
+    metrics:
+      - name: orders                 # simple
+        type: simple
+        agg: count
+        expr: order_id
+
+      - name: revenue                # simple
+        type: simple
+        agg: sum
+        expr: order_value
+        description: Item prices plus freight, all order statuses.
+
+      - name: delivered_orders       # simple with a filter
+        type: simple
+        agg: count
+        expr: order_id
+        filter: "{{ Dimension('olist_order__order_status') }} = 'delivered'"
+
+      - name: average_order_value    # ratio
+        type: ratio
+        numerator: revenue
+        denominator: orders
+
+      - name: cumulative_revenue     # cumulative
+        type: cumulative
+        input_metric: revenue
+
+      - name: revenue_growth_mom     # derived with time offset
+        type: derived
+        expr: (revenue - revenue_prev_month) / nullif(revenue_prev_month, 0)
+        input_metrics:
+          - name: revenue
+          - name: revenue
+            offset_window: 1 month
+            alias: revenue_prev_month
+
+      - name: customers     # Simple
+        type: simple
+        agg: count_distinct
+        expr: customer_unique_id
+
+      - name: avg_delivery_days
+        type: simple
+        agg: average
+        expr: delivery_days
+
+      - name: avg_review_score
+        type: simple
+        agg: average
+        expr: review_score
+
+      - name: late_deliveries
+        type: simple
+        agg: count
+        expr: order_id
+        filter: "{{ Dimension('olist_order__is_delivered_late') }} = true"
+
+      - name: measured_deliveries
+        type: simple
+        agg: count
+        expr: order_id
+        filter: "{{ Dimension('olist_order__is_delivered_late') }} is not null"
+
+      - name: late_delivery_rate
+        type: ratio
+        numerator: late_deliveries
+        denominator: measured_deliveries
+        description: Share of orders with a known delivery date that arrived after the estimate.
+
+
+
 
   - name: fct_order_items
     description: One row per order item, with product category and seller state.
