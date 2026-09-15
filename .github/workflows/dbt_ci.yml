@@ -1,0 +1,28 @@
+name: dbt CI
+
+on:
+  pull_request:
+    paths: ["dbt/**", ".github/workflows/dbt_ci.yml"]
+  workflow_dispatch:
+
+jobs:
+  dbt-build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: dbt
+    env:
+      SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+      SNOWFLAKE_PRIVATE_KEY: ${{ secrets.SNOWFLAKE_PRIVATE_KEY }}
+      DBT_PROFILES_DIR: .
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: pip install -r ../requirements.txt
+      - name: Install packages
+        run: dbt deps
+      - name: Build and test (CI schemas)
+        run: dbt build --target ci
