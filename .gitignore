@@ -1,0 +1,18 @@
+# secrets
+.keys/
+.env
+*.p8
+*.pem
+
+# data
+data/raw/*
+!data/raw/.gitkeep
+*.duckdb
+
+# python / dbt
+.venv/
+__pycache__/
+target/
+dbt_packages/
+logs/
+.user.yml

@@ -1,0 +1,24 @@
+# Snowflake CLI connections.
+# Copy to ~/.snowflake/config.toml and run: chmod 0600 ~/.snowflake/config.toml
+# account = your account identifier in the form ORGNAME-ACCOUNTNAME
+# (shown in Snowsight under your account details).
+
+[connections.olist_loader]
+account          = "RQFARSR-SO26456"
+user             = "LOADER_SVC"
+authenticator    = "SNOWFLAKE_JWT"
+private_key_file = "/dbt_semantic/.keys/loader_svc_rsa_key.p8"
+role             = "LOADER"
+warehouse        = "LOADING_WH"
+database         = "RAW"
+schema           = "OLIST"
+
+# Used from phase 2 on
+[connections.olist_dbt]
+account          = "RQFARSR-SO26456"
+user             = "DBT_SVC"
+authenticator    = "SNOWFLAKE_JWT"
+private_key_file = "/dbt_semantic/.keys/dbt_svc_rsa_key.p8"
+role             = "TRANSFORMER"
+warehouse        = "TRANSFORMING_WH"
+database         = "ANALYTICS"
