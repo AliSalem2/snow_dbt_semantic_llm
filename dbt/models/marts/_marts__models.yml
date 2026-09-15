@@ -1,0 +1,63 @@
+models:
+  - name: dim_customers
+    description: One row per customer_id (Olist issues a new customer_id per order).
+    columns:
+      - name: customer_id
+        data_tests: [unique, not_null]
+
+  - name: dim_sellers
+    description: One row per seller.
+    columns:
+      - name: seller_id
+        data_tests: [unique, not_null]
+
+  - name: dim_products
+    description: One row per product, with the English category name.
+    columns:
+      - name: product_id
+        data_tests: [unique, not_null]
+      - name: product_category
+        data_tests: [not_null]
+
+  - name: fct_orders
+    description: >
+      One row per order with value, payment, delivery performance and the
+      latest review score. Main input for the semantic layer.
+    columns:
+      - name: order_id
+        data_tests: [unique, not_null]
+      - name: customer_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id
+      - name: purchase_date
+        data_tests: [not_null]
+      - name: order_value
+        description: Item prices plus freight.
+      - name: payment_value
+        description: Sum of all payment lines. Can differ slightly from order_value (vouchers, interest).
+      - name: delivery_days
+        description: Days from purchase to delivery. Null if not delivered.
+      - name: is_delivered_late
+        description: Delivered after the estimated date. Null if not delivered.
+
+  - name: fct_order_items
+    description: One row per order item, with product category and seller state.
+    columns:
+      - name: order_item_key
+        data_tests: [unique, not_null]
+      - name: product_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_products')
+                field: product_id
+      - name: seller_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_sellers')
+                field: seller_id

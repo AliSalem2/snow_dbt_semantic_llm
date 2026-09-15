@@ -1,0 +1,13 @@
+models:
+  - name: int_order_items__aggregated
+    columns:
+      - name: order_id
+        data_tests: [unique, not_null]
+  - name: int_order_payments__aggregated
+    columns:
+      - name: order_id
+        data_tests: [unique, not_null]
+  - name: int_order_reviews__latest
+    columns:
+      - name: order_id
+        data_tests: [unique, not_null]

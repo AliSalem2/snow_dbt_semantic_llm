@@ -1,0 +1,14 @@
+sources:
+  - name: olist
+    description: Olist Brazilian e-commerce data, loaded as VARCHAR by snowflake/02_copy_into.sql
+    database: "{{ env_var('DBT_RAW_DATABASE', 'RAW') }}"
+    schema: OLIST
+    tables:
+      - name: orders
+      - name: order_items
+      - name: order_payments
+      - name: order_reviews
+      - name: customers
+      - name: products
+      - name: sellers
+      - name: product_category_translation
