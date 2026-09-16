@@ -10,7 +10,7 @@ olist:
       warehouse: TRANSFORMING_WH
       database: ANALYTICS
       schema: "{{ env_var('DBT_DEV_SCHEMA', 'DBT_DEV') }}"
-      private_key_path: "{{ env_var('SNOWFLAKE_PRIVATE_KEY_PATH') }}"
+      private_key_path: "{{ env_var('SNOWFLAKE_PRIVATE_KEY_PATH', '') }}"
       threads: 4
 
     ci:
@@ -21,7 +21,7 @@ olist:
       warehouse: TRANSFORMING_WH
       database: ANALYTICS
       schema: DBT_CI
-      private_key: "{{ env_var('SNOWFLAKE_PRIVATE_KEY') }}"
+      private_key: "{{ env_var('SNOWFLAKE_PRIVATE_KEY', '') }}"
       threads: 4
 
     prod:
@@ -32,5 +32,5 @@ olist:
       warehouse: TRANSFORMING_WH
       database: ANALYTICS
       schema: PROD
-      private_key_path: "{{ env_var('SNOWFLAKE_PRIVATE_KEY_PATH') }}"
+      private_key_path: "{{ env_var('SNOWFLAKE_PRIVATE_KEY_PATH', '') }}"
       threads: 4
