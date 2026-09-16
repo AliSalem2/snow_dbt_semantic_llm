@@ -134,14 +134,38 @@ models:
         denominator: measured_deliveries
         description: Share of orders with a known delivery date that arrived after the estimate.
 
-
-
-
+  # - name: fct_order_items
+  #   description: One row per order item, with product category and seller state.
+  #   columns:
+  #     - name: order_item_key
+  #       data_tests: [unique, not_null]
+  #     - name: product_id
+  #       data_tests:
+  #         - relationships:
+  #             arguments:
+  #               to: ref('dim_products')
+  #               field: product_id
+  #     - name: seller_id
+  #       data_tests:
+  #         - relationships:
+  #             arguments:
+  #               to: ref('dim_sellers')
+  #               field: seller_id
+  
   - name: fct_order_items
     description: One row per order item, with product category and seller state.
+    semantic_model: true
+    agg_time_dimension: purchase_date
     columns:
       - name: order_item_key
         data_tests: [unique, not_null]
+        entity:
+          type: primary
+          name: order_item
+      - name: order_id
+        entity:
+          type: foreign
+          name: olist_order
       - name: product_id
         data_tests:
           - relationships:
@@ -154,3 +178,26 @@ models:
               arguments:
                 to: ref('dim_sellers')
                 field: seller_id
+      - name: purchase_date
+        granularity: day
+        dimension:
+          type: time
+      - name: product_category
+        dimension:
+          type: categorical
+      - name: seller_state
+        dimension:
+          type: categorical
+
+    metrics:
+      - name: items_sold
+        type: simple
+        agg: count
+        expr: order_item_key
+        description: Number of items sold, all order statuses.
+
+      - name: product_revenue
+        type: simple
+        agg: sum
+        expr: price
+        description: Item prices only, without freight.

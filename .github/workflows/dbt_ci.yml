@@ -14,6 +14,7 @@ jobs:
     env:
       SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
       SNOWFLAKE_PRIVATE_KEY: ${{ secrets.SNOWFLAKE_PRIVATE_KEY }}
+      DBT_TARGET: ci
       DBT_PROFILES_DIR: .
     steps:
       - uses: actions/checkout@v4
@@ -25,4 +26,6 @@ jobs:
       - name: Install packages
         run: dbt deps
       - name: Build and test (CI schemas)
-        run: dbt build --target ci
+        run: dbt build
+      - name: Validate semantic layer
+        run: mf validate-configs
