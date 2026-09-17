@@ -11,8 +11,8 @@ version-controlled metric definitions, not from SQL an LLM improvised.
 | Phase | Scope | Status |
 |---|---|---|
 | 1 | Snowflake setup, RBAC, raw data load | Done |
-| 2 | dbt staging and marts, 48 tests, CI | Done |
-| 3 | Semantic layer: 2 semantic models, 14 metrics | Done |
+| 2 | dbt staging and marts, 51 tests, CI | Done |
+| 3 | Semantic layer: 3 semantic models, 20 metrics | Done |
 | 4 | MCP server and hosted chat demo | In progress |
 | 5 | Evaluation on golden business questions | Planned |
 
@@ -76,6 +76,12 @@ flowchart LR
 | `revenue_growth_mom` | derived | Revenue vs the previous month |
 | `items_sold` | simple | Count of order items |
 | `product_revenue` | simple | Item prices only, no freight |
+| `new_customers` | simple | Customers by date of first valid order (canceled and unavailable excluded) |
+| `repeat_customers` | simple, filtered | Customers with more than one valid order |
+| `repeat_purchase_rate` | ratio | repeat_customers / new_customers |
+| `repeat_customers_90d` | simple, filtered | Customers who ordered again within 90 days |
+| `customers_with_90d_window` | simple, filtered | Customers whose 90-day window had ended |
+| `repeat_rate_90d` | ratio | repeat_customers_90d / customers_with_90d_window |
 
 ## Example results
 
@@ -112,6 +118,9 @@ mf query --metrics product_revenue --group-by order_item__product_category \
 - **`customer_id` is issued per order** in Olist. Customer metrics use `customer_unique_id`; counting `customer_id` would silently equal the order count.
 - **`order` is a reserved word in Snowflake**, so the entity is named `olist_order`. This passed locally on DuckDB and failed only against Snowflake, which is why CI validates against the real warehouse.
 - **Profit is not answerable:** the dataset has no cost data. The semantic layer only exposes what the data supports.
+- **Churn is not well defined here:** about 97% of customers order once. The semantic layer exposes repeat purchase rate instead, plus a 90-day version that excludes customers whose window had not ended, so recent cohorts don't look worse than they are.
+- **Canceled-only customers are excluded from customer profiles:** `customers` (all orders) is 96,096 and `new_customers` (valid orders) is 94,990.
+- **Repeat customers bring 5.6% of revenue** and have a lower average order value (about 146 vs 161 BRL) than one-time customers.
 
 ## Repository layout
 
