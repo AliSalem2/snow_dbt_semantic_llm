@@ -44,6 +44,7 @@ models:
       - name: is_repeat_customer
         dimension:
           type: categorical
+
       - name: repeated_within_90d
         description: Second order within 90 days of the first. Null if the 90-day window was not complete.
         dimension:
@@ -59,6 +60,8 @@ models:
         agg: count
         expr: customer_unique_id
         filter: "{{ Dimension('customer__is_repeat_customer') }} = true"
+        description: Customers with more than one valid order (canceled and unavailable excluded).
+
       - name: repeat_purchase_rate
         type: ratio
         numerator: repeat_customers
@@ -69,11 +72,16 @@ models:
         agg: count
         expr: customer_unique_id
         filter: "{{ Dimension('customer__repeated_within_90d') }} = true"
+        description: Helper for repeat_rate_90d. Customers who ordered again within 90 days of their first order.
+
+
       - name: customers_with_90d_window
         type: simple
         agg: count
         expr: customer_unique_id
         filter: "{{ Dimension('customer__repeated_within_90d') }} is not null"
+        description: Helper for repeat_rate_90d. Customers whose first order was at least 90 days before the end of the data.
+
       - name: repeat_rate_90d
         type: ratio
         numerator: repeat_customers_90d
@@ -136,27 +144,36 @@ models:
         type: simple
         agg: count
         expr: order_id
+        description: Number of orders, all statuses including canceled and unavailable.
+
 
       - name: revenue                # simple
         type: simple
         agg: sum
         expr: order_value
-        description: Item prices plus freight, all order statuses.
+        description: Total order value in BRL (item prices plus freight), all statuses. Default metric for revenue questions by customer, region or time.
+
 
       - name: delivered_orders       # simple with a filter
         type: simple
         agg: count
         expr: order_id
         filter: "{{ Dimension('olist_order__order_status') }} = 'delivered'"
+        description: Number of orders with status delivered.
+
 
       - name: average_order_value    # ratio
         type: ratio
         numerator: revenue
         denominator: orders
+        description: Average order value in BRL (revenue divided by orders), including freight.
+
 
       - name: cumulative_revenue     # cumulative
         type: cumulative
         input_metric: revenue
+        description: Running total of revenue in BRL over time, including freight.
+
 
       - name: revenue_growth_mom     # derived with time offset
         type: derived
@@ -166,33 +183,46 @@ models:
           - name: revenue
             offset_window: 1 month
             alias: revenue_prev_month
+        description: Month-over-month revenue growth as a share (0.1 = 10%). Use with metric_time__month.
+
 
       - name: customers     # Simple
         type: simple
         agg: count_distinct
         expr: customer_unique_id
+        description: Distinct customers (customer_unique_id) with any order, all statuses. Use new_customers for acquisition questions.
+
 
       - name: avg_delivery_days
         type: simple
         agg: average
         expr: delivery_days
+        description: Average days from purchase to delivery, delivered orders only.
+
+
 
       - name: avg_review_score
         type: simple
         agg: average
         expr: review_score
+        description: Average review score on a 1 to 5 scale, using the latest review per order.
+
 
       - name: late_deliveries
         type: simple
         agg: count
         expr: order_id
         filter: "{{ Dimension('olist_order__is_delivered_late') }} = true"
+        description: Helper for late_delivery_rate. Orders delivered after the estimated date.
+
 
       - name: measured_deliveries
         type: simple
         agg: count
         expr: order_id
         filter: "{{ Dimension('olist_order__is_delivered_late') }} is not null"
+        description: Helper for late_delivery_rate. Delivered orders with a known delivery date.
+
 
       - name: late_delivery_rate
         type: ratio
@@ -266,4 +296,4 @@ models:
         type: simple
         agg: sum
         expr: price
-        description: Item prices only, without freight.
+        description: Item prices in BRL without freight. Use for revenue by product category or seller.

@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "olist-metrics": {
+      "command": ".venv/bin/python",
+      "args": ["-m", "app.mcp_server"],
+      "env": {
+        "DBT_TARGET": "serve",
+        "SNOWFLAKE_ACCOUNT": "${SNOWFLAKE_ACCOUNT}",
+        "SNOWFLAKE_MCP_PRIVATE_KEY_PATH": "${SNOWFLAKE_MCP_PRIVATE_KEY_PATH}"
+      }
+    }
+  }
+}
