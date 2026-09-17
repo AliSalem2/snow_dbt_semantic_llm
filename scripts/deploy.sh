@@ -20,4 +20,4 @@ gcloud run deploy "$SERVICE" \
   --cpu=1 \
   --timeout=120 \
   --set-env-vars "SNOWFLAKE_ACCOUNT=${SNOWFLAKE_ACCOUNT},SNOWFLAKE_MCP_PRIVATE_KEY_PATH=/secrets/snowflake/key.p8" \
-  --set-secrets "/secrets/snowflake/key.p8=snowflake-mcp-key:latest,ANTHROPIC_API_KEY=anthropic-api-key:latest"
+  --set-secrets "/secrets/snowflake/key.p8=snowflake-mcp-key:latest,ANTHROPIC_API_KEY=anthropic-api-key:latest,MCP_TOKEN=mcp-token:latest"

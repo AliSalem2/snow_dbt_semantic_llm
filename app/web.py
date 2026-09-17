@@ -22,7 +22,7 @@ from typing import Any
 
 from anthropic import AsyncAnthropic
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 from mcp.server.transport_security import TransportSecuritySettings
 from pydantic import BaseModel, Field
 from starlette.concurrency import run_in_threadpool
@@ -39,6 +39,9 @@ QUESTIONS_PER_HOUR_PER_IP = int(os.getenv("QUESTIONS_PER_HOUR_PER_IP", "15"))
 QUESTIONS_PER_DAY_TOTAL = int(os.getenv("QUESTIONS_PER_DAY_TOTAL", "300"))
 
 STATIC_DIR = Path(__file__).parent / "static"
+# When set, /mcp requires "Authorization: Bearer <MCP_TOKEN>". Unset means open,
+# which is fine locally but must never be the case for a public deployment.
+MCP_TOKEN = os.getenv("MCP_TOKEN", "")
 
 SYSTEM_PROMPT = INSTRUCTIONS + """
 You are answering visitors of a public demo page, often recruiters.
@@ -88,6 +91,15 @@ async def _warm_up() -> None:
 
 app = FastAPI(title="Olist metrics demo", lifespan=lifespan)
 client = AsyncAnthropic()  # reads ANTHROPIC_API_KEY
+
+
+@app.middleware("http")
+async def protect_mcp(request: Request, call_next):
+    """The chat page is public; the raw MCP endpoint is not."""
+    if request.url.path.startswith("/mcp") and MCP_TOKEN:
+        if request.headers.get("authorization", "") != f"Bearer {MCP_TOKEN}":
+            return JSONResponse({"error": "Unauthorized"}, status_code=401)
+    return await call_next(request)
 
 
 # --- Simple in-memory limits (run Cloud Run with max-instances=1) -------------

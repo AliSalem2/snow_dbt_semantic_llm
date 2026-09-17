@@ -58,7 +58,7 @@ def _parse_project() -> None:
 
 
 @lru_cache(maxsize=1)
-def _engine() -> MetricFlowEngine:
+def _configuration() -> CLIConfiguration:
     """Parse the project, load the semantic manifest and connect, once."""
     _parse_project()
     cfg = CLIConfiguration()
@@ -67,7 +67,16 @@ def _engine() -> MetricFlowEngine:
         dbt_project_path=DBT_DIR,
         configure_file_logging=False,
     )
-    return cfg.mf
+    return cfg
+
+
+def _engine() -> MetricFlowEngine:
+    return _configuration().mf
+
+
+def sql_client():
+    """Warehouse connection, used by the evaluation for its gold queries."""
+    return _configuration().sql_client
 
 
 def _to_json(value: Any) -> Any:

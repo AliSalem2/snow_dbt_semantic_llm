@@ -1,0 +1,764 @@
+[
+  {
+    "id": "q01",
+    "question": "What was the total revenue in 2017?",
+    "gold": {
+      "columns": [
+        "revenue"
+      ],
+      "rows": [
+        [
+          7142672.43
+        ]
+      ]
+    },
+    "semantic": {
+      "answer": "## Total Revenue in 2017: **BRL 7,142,672.43**\n\nThis is the **revenue** metric \u2014 total order value (item prices + freight), across all order statuses, for orders placed in calendar year 2017.",
+      "tool_calls": 2,
+      "seconds": 4.8,
+      "usage": {
+        "input_tokens": 7722,
+        "output_tokens": 208
+      },
+      "verdict": "pass",
+      "reason": "Matches correct total revenue figure for 2017."
+    },
+    "sql": {
+      "answer": "## Total Revenue in 2017\n\n**R$ 7,142,672.43** (based on sum of `order_value` across all orders placed in 2017)",
+      "tool_calls": 1,
+      "seconds": 4.3,
+      "usage": {
+        "input_tokens": 2323,
+        "output_tokens": 229
+      },
+      "verdict": "pass",
+      "reason": "Matches correct total revenue figure for 2017."
+    }
+  },
+  {
+    "id": "q02",
+    "question": "How many orders were placed in 2018?",
+    "gold": {
+      "columns": [
+        "orders"
+      ],
+      "rows": [
+        [
+          54011
+        ]
+      ]
+    },
+    "semantic": {
+      "answer": "**54,011 orders** were placed in 2018 (all statuses, including canceled and unavailable \u2014 Olist's \"orders\" metric).\n\nNote: 2018 data only runs through October, so this is a partial year, not a full-year total.",
+      "tool_calls": 2,
+      "seconds": 6.3,
+      "usage": {
+        "input_tokens": 7787,
+        "output_tokens": 233
+      },
+      "verdict": "pass",
+      "reason": "States 54,011 orders, matching correct result."
+    },
+    "sql": {
+      "answer": "**54,011 orders** were placed in 2018.",
+      "tool_calls": 1,
+      "seconds": 2.9,
+      "usage": {
+        "input_tokens": 2242,
+        "output_tokens": 122
+      },
+      "verdict": "pass",
+      "reason": "Matches correct figure of 54,011 orders."
+    }
+  },
+  {
+    "id": "q03",
+    "question": "Which state brings the highest revenue, and how much?",
+    "gold": {
+      "columns": [
+        "customer_state",
+        "revenue"
+      ],
+      "rows": [
+        [
+          "SP",
+          5921678.12
+        ],
+        [
+          "RJ",
+          2129681.98
+        ],
+        [
+          "MG",
+          1856161.49
+        ]
+      ]
+    },
+    "semantic": {
+      "answer": "**S\u00e3o Paulo (SP)** brings the highest revenue, at **R$ 5,921,678.12**.\n\nThis is based on **revenue** (item price + freight, all order statuses) grouped by the state where the order was placed.\n\n| State | Revenue (BRL) |\n|---|---|\n| SP | 5,921,678.12 |",
+      "tool_calls": 3,
+      "seconds": 7.8,
+      "usage": {
+        "input_tokens": 11053,
+        "output_tokens": 334
+      },
+      "verdict": "pass",
+      "reason": "Correct top state SP with matching revenue figure."
+    },
+    "sql": {
+      "answer": "## Highest Revenue State\n\n**SP (S\u00e3o Paulo)** brings the highest revenue at **R$ 5,921,678.12**, well ahead of the next closest state, RJ (R$ 2,129,681.98).",
+      "tool_calls": 1,
+      "seconds": 3.3,
+      "usage": {
+        "input_tokens": 2326,
+        "output_tokens": 193
+      },
+      "verdict": "pass",
+      "reason": "Correct top state SP with matching revenue figure."
+    }
+  },
+  {
+    "id": "q04",
+    "question": "What is the average order value overall?",
+    "gold": {
+      "columns": [
+        "average_order_value"
+      ],
+      "rows": [
+        [
+          159.3262
+        ]
+      ]
+    },
+    "semantic": {
+      "answer": "## Average Order Value: **R$ 159.33**\n\nThis is the **average order value** metric \u2014 total revenue (item prices **plus freight**) divided by number of orders, across all order statuses and the full dataset period (Sep 2016\u2013Oct 2018).",
+      "tool_calls": 2,
+      "seconds": 6.4,
+      "usage": {
+        "input_tokens": 7727,
+        "output_tokens": 204
+      },
+      "verdict": "pass",
+      "reason": "Correct average order value of R$159.33 matches expected 159.33."
+    },
+    "sql": {
+      "answer": "**Average order value: R$ 159.33**",
+      "tool_calls": 1,
+      "seconds": 3.2,
+      "usage": {
+        "input_tokens": 2226,
+        "output_tokens": 105
+      },
+      "verdict": "pass",
+      "reason": "Matches correct average order value of 159.33"
+    }
+  },
+  {
+    "id": "q05",
+    "question": "What share of deliveries arrived later than estimated in 2018?",
+    "gold": {
+      "columns": [
+        "late_delivery_rate"
+      ],
+      "rows": [
+        [
+          0.0773
+        ]
+      ]
+    },
+    "semantic": {
+      "answer": "## Late delivery rate in 2018: **7.73%**\n\nBased on **52,778** delivered orders with a known delivery date in 2018, **4,079** arrived after the estimated delivery date \u2014 a late delivery rate of 7.73%.\n\nNote: 2018 data is partial (through October), and this metric only covers orders with a confirmed delivery date (excludes lost/undelivered orders).",
+      "tool_calls": 2,
+      "seconds": 5.4,
+      "usage": {
+        "input_tokens": 8623,
+        "output_tokens": 313
+      },
+      "verdict": "pass",
+      "reason": "Matches correct late delivery rate of 7.73%"
+    },
+    "sql": {
+      "answer": "## Late Deliveries in 2018\n\nOf orders **purchased in 2018** that were delivered:\n\n- **Total delivered orders:** 52,783\n- **Delivered late:** 4,078\n- **Share arriving later than estimated: \u22487.7%**",
+      "tool_calls": 1,
+      "seconds": 4.7,
+      "usage": {
+        "input_tokens": 2338,
+        "output_tokens": 246
+      },
+      "verdict": "pass",
+      "reason": "7.7% matches correct 7.73% late delivery rate"
+    }
+  },
+  {
+    "id": "q06",
+    "question": "How many days does delivery take on average?",
+    "gold": {
+      "columns": [
+        "avg_delivery_days"
+      ],
+      "rows": [
+        [
+          12.4973
+        ]
+      ]
+    },
+    "semantic": {
+      "answer": "**Average delivery time: ~12.5 days** (12.50 days), measured as days from purchase to delivery, for delivered orders only.",
+      "tool_calls": 2,
+      "seconds": 4.4,
+      "usage": {
+        "input_tokens": 7637,
+        "output_tokens": 154
+      },
+      "verdict": "pass",
+      "reason": "Matches correct average of 12.4973 days"
+    },
+    "sql": {
+      "answer": "On average, delivery takes about **12.5 days** for delivered orders.",
+      "tool_calls": 1,
+      "seconds": 2.9,
+      "usage": {
+        "input_tokens": 2223,
+        "output_tokens": 104
+      },
+      "verdict": "pass",
+      "reason": "Matches correct average delivery days of 12.4973"
+    }
+  },
+  {
+    "id": "q07",
+    "question": "What is the average review score?",
+    "gold": {
+      "columns": [
+        "avg_review_score"
+      ],
+      "rows": [
+        [
+          4.0864
+        ]
+      ]
+    },
+    "semantic": {
+      "answer": "**Average review score: 4.09** (on a 1\u20135 scale)\n\nThis uses the latest review per order across all orders in the dataset (Sep 2016\u2013Oct 2018). It indicates generally positive customer satisfaction.",
+      "tool_calls": 2,
+      "seconds": 4.5,
+      "usage": {
+        "input_tokens": 7579,
+        "output_tokens": 161
+      },
+      "verdict": "pass",
+      "reason": "4.09 matches expected 4.0864 within rounding"
+    },
+    "sql": {
+      "answer": "**Average review score: 4.09** (out of 5)",
+      "tool_calls": 1,
+      "seconds": 2.6,
+      "usage": {
+        "input_tokens": 2237,
+        "output_tokens": 123
+      },
+      "verdict": "pass",
+      "reason": "4.09 matches correct average 4.0864 within rounding"
+    }
+  },
+  {
+    "id": "q08",
+    "question": "Which product category earns the most, and how much?",
+    "gold": {
+      "columns": [
+        "product_category",
+        "product_revenue"
+      ],
+      "rows": [
+        [
+          "health_beauty",
+          1258681.34
+        ],
+        [
+          "watches_gifts",
+          1205005.68
+        ],
+        [
+          "bed_bath_table",
+          1036988.68
+        ]
+      ]
+    },
+    "semantic": {
+      "answer": "**Health & Beauty** earns the most, with **R$ 1,258,681** in product revenue (item prices, excluding freight).\n\n| Product Category | Product Revenue (BRL) |\n|---|---|\n| health_beauty | 1,258,681 |\n| watches_gifts | 1,205,006 |\n| bed_bath_table | 1,036,989 |\n| sports_leisure | 988,049 |\n| computers_accessories | 911,954 |\n\nNote: this uses **product revenue** (item price only, no freight/shipping). If you'd instead like total order value including freight by category, let me know \u2014 that metric isn't broken out by product category by default but can be approximated differently.",
+      "tool_calls": 3,
+      "seconds": 7.7,
+      "usage": {
+        "input_tokens": 11423,
+        "output_tokens": 519
+      },
+      "verdict": "pass",
+      "reason": "Correctly identifies health_beauty with matching revenue figure."
+    },
+    "sql": {
+      "answer": "## Top Product Category by Revenue\n\n**health_beauty** earns the most, with total revenue of **R$1,441,248.07**.\n\nNext closest categories:\n| Category | Revenue (BRL) |\n|---|---|\n| watches_gifts | 1,305,541.61 |\n| bed_bath_table | 1,241,681.72 |\n| sports_leisure | 1,156,656.48 |\n| computers_accessories | 1,059,272.40 |",
+      "tool_calls": 1,
+      "seconds": 4.0,
+      "usage": {
+        "input_tokens": 2324,
+        "output_tokens": 253
+      },
+      "verdict": "fail",
+      "reason": "Revenue figure for health_beauty is significantly off (1.44M vs 1.26M)."
+    }
+  },
+  {
+    "id": "q09",
+    "question": "How many items were sold in total?",
+    "gold": {
+      "columns": [
+        "items_sold"
+      ],
+      "rows": [
+        [
+          112650
+        ]
+      ]
+    },
+    "semantic": {
+      "answer": "**112,650 items sold in total** (metric: *items_sold*, counts all order items across all order statuses, including canceled/unavailable orders).",
+      "tool_calls": 2,
+      "seconds": 5.8,
+      "usage": {
+        "input_tokens": 7682,
+        "output_tokens": 170
+      },
+      "verdict": "pass",
+      "reason": "Matches correct total of 112,650 items sold."
+    },
+    "sql": {
+      "answer": "**112,650** items were sold in total.",
+      "tool_calls": 1,
+      "seconds": 3.5,
+      "usage": {
+        "input_tokens": 2218,
+        "output_tokens": 100
+      },
+      "verdict": "pass",
+      "reason": "Matches correct total of 112,650 items sold."
+    }
+  },
+  {
+    "id": "q10",
+    "question": "How many customers placed at least one valid order, excluding canceled and unavailable ones?",
+    "gold": {
+      "columns": [
+        "new_customers"
+      ],
+      "rows": [
+        [
+          94990
+        ]
+      ]
+    },
+    "semantic": {
+      "answer": "**94,990 customers** placed at least one valid order (excluding canceled and unavailable orders).\n\nThis uses the **new_customers** metric, which counts distinct customers by the date of their first valid order \u2014 so summing it across all time gives the total count of customers with \u22651 valid order.",
+      "tool_calls": 2,
+      "seconds": 6.8,
+      "usage": {
+        "input_tokens": 7861,
+        "output_tokens": 321
+      },
+      "verdict": "pass",
+      "reason": "Matches correct figure 94,990 customers."
+    },
+    "sql": {
+      "answer": "**94,990** unique customers placed at least one valid order (excluding canceled and unavailable orders).",
+      "tool_calls": 1,
+      "seconds": 3.7,
+      "usage": {
+        "input_tokens": 2287,
+        "output_tokens": 143
+      },
+      "verdict": "pass",
+      "reason": "Matches correct figure of 94,990 customers."
+    }
+  },
+  {
+    "id": "q11",
+    "question": "What share of customers order more than once?",
+    "gold": {
+      "columns": [
+        "repeat_purchase_rate"
+      ],
+      "rows": [
+        [
+          0.0304
+        ]
+      ]
+    },
+    "semantic": {
+      "answer": "## Repeat purchase rate: ~3.0%\n\nUsing the **repeat purchase rate** metric (share of customers with more than one valid order, at any time \u2014 excludes canceled/unavailable orders):\n\n| Metric | Value |\n|---|---|\n| Repeat customers | 2,888 |\n| Total customers | 96,096 |\n| Repeat purchase rate | **3.04%** |\n\nSo only about 3 out of every 100 customers place more than one order over the full Sep 2016\u2013Oct 2018 period. This is a lifetime rate \u2014 since 2018 is a partial year, more recent customers have had less time to make a second purchase, which pulls this rate down somewhat.",
+      "tool_calls": 2,
+      "seconds": 9.2,
+      "usage": {
+        "input_tokens": 8338,
+        "output_tokens": 342
+      },
+      "verdict": "pass",
+      "reason": "Matches correct repeat purchase rate of 3.04%."
+    },
+    "sql": {
+      "answer": "## Repeat Purchase Rate\n\nOut of **94,990** unique customers, only **2,888** (about **3.04%**) placed more than one order.\n\nThe vast majority (~97%) of customers in this dataset made just a single purchase.",
+      "tool_calls": 1,
+      "seconds": 4.0,
+      "usage": {
+        "input_tokens": 2350,
+        "output_tokens": 267
+      },
+      "verdict": "pass",
+      "reason": "Matches correct repeat purchase rate of 3.04%"
+    }
+  },
+  {
+    "id": "q12",
+    "question": "What share of customers come back within 90 days of their first order?",
+    "gold": {
+      "columns": [
+        "repeat_rate_90d"
+      ],
+      "rows": [
+        [
+          0.0231
+        ]
+      ]
+    },
+    "semantic": {
+      "answer": "## Answer: ~2.3% of customers return within 90 days\n\nUsing the **90-day repeat rate** metric (share of customers who placed a second order within 90 days of their first, among customers whose 90-day window has already closed):\n\n| Metric | Value |\n|---|---|\n| Repeat rate (90 days) | 2.31% |\n| Repeat customers (within 90d) | 1,797 |\n| Eligible customers (90d window elapsed) | 77,742 |\n\n**Note:** This excludes customers whose first order was too recent (within the last 90 days of the dataset) to have had a full 90-day window to return in \u2014 so the denominator (77,742) is smaller than the total customer base. For comparison, the broader **repeat_purchase_rate** metric (any second order, at any time, not just within 90 days) would give a different, likely higher, figure if you'd like that instead.",
+      "tool_calls": 2,
+      "seconds": 6.8,
+      "usage": {
+        "input_tokens": 8507,
+        "output_tokens": 416
+      },
+      "verdict": "pass",
+      "reason": "Matches correct 2.31% repeat rate figure."
+    },
+    "sql": {
+      "answer": "## Repeat Purchase Rate (within 90 days)\n\nOut of **94,990** unique customers, only **1,797** made a repeat purchase within 90 days of their first order \u2014 about **1.89%**.\n\nThis indicates very low short-term repeat purchase behavior, typical of many e-commerce marketplaces where customers make infrequent purchases.",
+      "tool_calls": 1,
+      "seconds": 5.1,
+      "usage": {
+        "input_tokens": 2350,
+        "output_tokens": 291
+      },
+      "verdict": "fail",
+      "reason": "Answer states 1.89% repeat rate vs correct 2.31%, outside tolerance"
+    }
+  },
+  {
+    "id": "q13",
+    "question": "Where do most new customers come from? Give the top three states.",
+    "gold": {
+      "columns": [
+        "home_state",
+        "new_customers"
+      ],
+      "rows": [
+        [
+          "SP",
+          39743
+        ],
+        [
+          "RJ",
+          12239
+        ],
+        [
+          "MG",
+          11128
+        ]
+      ]
+    },
+    "semantic": {
+      "answer": "## Top 3 States for New Customers\n\n| Rank | State | New Customers |\n|------|-------|---------------|\n| 1 | SP (S\u00e3o Paulo) | 39,743 |\n| 2 | RJ (Rio de Janeiro) | 12,239 |\n| 3 | MG (Minas Gerais) | 11,128 |\n\n**S\u00e3o Paulo dominates**, contributing over 3x as many new customers as the next-closest state. This is based on the **new customers** metric (customers counted by the date of their first valid order, excluding canceled/unavailable orders), grouped by the customer's home state.",
+      "tool_calls": 2,
+      "seconds": 5.8,
+      "usage": {
+        "input_tokens": 7890,
+        "output_tokens": 385
+      },
+      "verdict": "pass",
+      "reason": "Matches correct states and figures exactly"
+    },
+    "sql": {
+      "answer": "**Top 3 states for new customers:**\n\n1. **SP (S\u00e3o Paulo)** \u2013 39,743 customers\n2. **RJ (Rio de Janeiro)** \u2013 12,239 customers\n3. **MG (Minas Gerais)** \u2013 11,128 customers",
+      "tool_calls": 1,
+      "seconds": 4.1,
+      "usage": {
+        "input_tokens": 2332,
+        "output_tokens": 244
+      },
+      "verdict": "pass",
+      "reason": "Matches correct top three states and figures exactly."
+    }
+  },
+  {
+    "id": "q14",
+    "question": "Which month had the highest revenue?",
+    "gold": {
+      "columns": [
+        "yr",
+        "mth",
+        "revenue"
+      ],
+      "rows": [
+        [
+          2017,
+          11,
+          1179143.77
+        ],
+        [
+          2018,
+          4,
+          1159698.04
+        ],
+        [
+          2018,
+          3,
+          1155126.82
+        ]
+      ]
+    },
+    "semantic": {
+      "answer": "**November 2017** had the highest revenue, at **R$ 1,179,143.77**.\n\nThis uses the *revenue* metric (order value including freight, not just product price).\n\n| Month | Revenue (BRL) |\n|---|---|\n| 2017-11 | 1,179,143.77 |\n| 2018-04 | 1,159,698.04 |\n| 2018-03 | 1,155,126.82 |\n| 2018-05 | 1,149,781.82 |\n| 2018-01 | 1,107,301.89 |\n\nNote: November 2017 was likely boosted by Black Friday sales.",
+      "tool_calls": 1,
+      "seconds": 6.9,
+      "usage": {
+        "input_tokens": 3972,
+        "output_tokens": 353
+      },
+      "verdict": "pass",
+      "reason": "Correctly identifies November 2017 with matching revenue figure."
+    },
+    "sql": {
+      "answer": "## Highest Revenue Month\n\n**November 2017** had the highest revenue at **R$1,179,143.77**, narrowly ahead of April 2018 (R$1,159,698.04) and March 2018 (R$1,155,126.82).",
+      "tool_calls": 1,
+      "seconds": 4.5,
+      "usage": {
+        "input_tokens": 2390,
+        "output_tokens": 226
+      },
+      "verdict": "pass",
+      "reason": "Correctly identifies November 2017 with matching revenue figures."
+    }
+  },
+  {
+    "id": "q15",
+    "question": "How did revenue in the first quarter of 2018 compare with the fourth quarter of 2017?",
+    "gold": {
+      "columns": [
+        "yr",
+        "qtr",
+        "revenue"
+      ],
+      "rows": [
+        [
+          2017,
+          4,
+          2812003.37
+        ],
+        [
+          2018,
+          1,
+          3249337.67
+        ]
+      ]
+    },
+    "semantic": {
+      "answer": "## Revenue: Q1 2018 vs Q4 2017\n\n| Quarter | Revenue (BRL) |\n|---|---|\n| Q4 2017 (Oct\u2013Dec) | 2,812,003.37 |\n| Q1 2018 (Jan\u2013Mar) | 3,249,337.67 |\n\n**Q1 2018 revenue was about 437,334 BRL higher than Q4 2017 \u2014 a ~15.5% increase.**\n\n*Metric used: revenue* (includes both product price and freight, based on order purchase date).",
+      "tool_calls": 1,
+      "seconds": 4.9,
+      "usage": {
+        "input_tokens": 4065,
+        "output_tokens": 385
+      },
+      "verdict": "pass",
+      "reason": "Figures match correct result exactly, with accurate percentage increase."
+    },
+    "sql": {
+      "answer": "## Revenue: Q4 2017 vs Q1 2018\n\n| Quarter | Revenue (BRL) | Orders |\n|---|---|---|\n| Q4 2017 | 2,812,003.37 | 17,848 |\n| Q1 2018 | 3,249,337.67 | 21,208 |\n\n**Q1 2018 revenue grew ~15.6%** over Q4 2017 (+437,334 BRL), with order volume also up ~18.8%.",
+      "tool_calls": 1,
+      "seconds": 4.8,
+      "usage": {
+        "input_tokens": 2431,
+        "output_tokens": 366
+      },
+      "verdict": "pass",
+      "reason": "Matches correct revenue figures for both quarters."
+    }
+  },
+  {
+    "id": "q16",
+    "question": "Do repeat customers spend more per order than one-time customers?",
+    "gold": {
+      "columns": [
+        "is_repeat_customer",
+        "average_order_value"
+      ],
+      "rows": [
+        [
+          false,
+          161.0685
+        ],
+        [
+          true,
+          145.6321
+        ]
+      ]
+    },
+    "semantic": {
+      "answer": "## Repeat customers actually spend **less** per order, not more\n\nUsing **revenue** (item price + freight) divided by **orders**, grouped by whether the customer is a repeat buyer:\n\n| Customer type | Orders | Revenue (BRL) | Avg. order value (BRL) |\n|---|---:|---:|---:|\n| One-time customers | 92,208 | 14,851,802.69 | **161.07** |\n| Repeat customers | 6,118 | 890,977.11 | **145.63** |\n\n*(A small residual of 1,115 orders with no matched customer profile is excluded \u2014 negligible.)*\n\n**Takeaway:** one-time customers have a higher average order value (~R$161) than repeat customers (~R$146), a difference of about R$15, or ~10%. So in this dataset, being a repeat customer is not associated with spending more per order \u2014 if anything, slightly less. Note this uses *revenue* (includes freight); the pattern is similar in direction using product-only revenue since freight scales with order size in both groups.\n\nAlso worth noting: repeat customers are a small share of the base \u2014 only 6,118 out of the customers with valid orders, versus 92,208 one-time customers.",
+      "tool_calls": 3,
+      "seconds": 13.2,
+      "usage": {
+        "input_tokens": 11478,
+        "output_tokens": 825
+      },
+      "verdict": "pass",
+      "reason": "Matches figures: one-time 161.07, repeat 145.63, correct ranking."
+    },
+    "sql": {
+      "answer": "## Repeat vs. One-Time Customer Spend per Order\n\n| Customer Type | Orders | Avg Order Value | Avg Payment Value |\n|---|---|---|---|\n| Repeat customers | 6,118 | R$145.63 | R$145.88 |\n| One-time customers | 92,208 | R$161.07 | R$161.31 |\n\n**No \u2014 repeat customers actually spend slightly *less* per order** (~R$145 vs ~R$161), not more. The difference is modest (~9-10%), but one-time customers have higher average order values in this dataset.",
+      "tool_calls": 1,
+      "seconds": 4.9,
+      "usage": {
+        "input_tokens": 2401,
+        "output_tokens": 377
+      },
+      "verdict": "pass",
+      "reason": "Matches correct figures and ranking: repeat customers spend less per order."
+    }
+  },
+  {
+    "id": "q17",
+    "question": "Which seller state generates the most product revenue?",
+    "gold": {
+      "columns": [
+        "seller_state",
+        "product_revenue"
+      ],
+      "rows": [
+        [
+          "SP",
+          8753396.21
+        ],
+        [
+          "PR",
+          1261887.21
+        ],
+        [
+          "MG",
+          1011564.74
+        ]
+      ]
+    },
+    "semantic": {
+      "answer": "**S\u00e3o Paulo (SP)** generates by far the most product revenue among seller states.\n\n| Seller State | Product Revenue (BRL) |\n|---|---|\n| SP | 8,753,396.21 |\n| PR | 1,261,887.21 |\n| MG | 1,011,564.74 |\n| RJ | 843,984.22 |\n| SC | 632,426.07 |\n\nMetric used: **product revenue** \u2014 item prices only, excluding freight, grouped by the seller's state.",
+      "tool_calls": 3,
+      "seconds": 6.9,
+      "usage": {
+        "input_tokens": 11272,
+        "output_tokens": 414
+      },
+      "verdict": "pass",
+      "reason": "Correct top state SP and matching revenue figures for top three states."
+    },
+    "sql": {
+      "answer": "**S\u00e3o Paulo (SP)** generates the most product revenue by far, with **R$10,235,883.88** in item value \u2014 over 7x the next highest state, Paran\u00e1 (PR) at R$1,458,900.73.",
+      "tool_calls": 1,
+      "seconds": 3.3,
+      "usage": {
+        "input_tokens": 2357,
+        "output_tokens": 169
+      },
+      "verdict": "fail",
+      "reason": "grader returned: "
+    }
+  },
+  {
+    "id": "q18",
+    "question": "Which product is the most profitable?",
+    "gold": null,
+    "semantic": {
+      "answer": "This dataset doesn't include cost or profit data \u2014 only order/product **revenue** (sales amounts, with or without freight), review scores, and delivery timing. There's no cost basis to calculate profitability.\n\nI can tell you which product **generates the most revenue**, if that's helpful \u2014 would you like me to pull that instead (by product ID or by product category)?",
+      "tool_calls": 0,
+      "seconds": 2.7,
+      "usage": {
+        "input_tokens": 1758,
+        "output_tokens": 112
+      },
+      "verdict": "pass",
+      "reason": "Correctly states data lacks profit info, doesn't invent figures."
+    },
+    "sql": {
+      "answer": "## Answer\n\n**Cannot determine true profitability** \u2014 there's no product cost/margin data in the schema, only sale price and revenue fields.\n\nAs a **revenue proxy**, the top product is:\n\n| Product ID | Category | Total Revenue (BRL) | Items Sold |\n|---|---|---|---|\n| bb50f2e236e5eea0100680137654686c | health_beauty | 67,606.10 | 195 |\n| d1c427060a0f73f6b889a5c7c61f2ac4 | computers_accessories | 60,976.03 | 343 |\n| 6cdd53843498f92890544667809f1595 | health_beauty | 59,093.99 | 156 |\n| 99a4788cb24856965c36a24e339b6058 | bed_bath_table | 51,071.60 | 488 |\n| d6160fb7873f184099d9bc95e30376af | computers | 50,326.18 | 35 |\n\nIf you have cost data elsewhere, I can incorporate it to compute actual profit margins.",
+      "tool_calls": 1,
+      "seconds": 7.8,
+      "usage": {
+        "input_tokens": 2664,
+        "output_tokens": 664
+      },
+      "verdict": "pass",
+      "reason": "Correctly states profitability cannot be determined; no invented profit figure."
+    }
+  },
+  {
+    "id": "q19",
+    "question": "What is the gross margin by product category?",
+    "gold": null,
+    "semantic": {
+      "answer": "The dataset does not include cost data, so **gross margin cannot be calculated** \u2014 there's no cost-of-goods-sold or profit metric available in this semantic layer.\n\nWhat I *can* offer instead, using the available metrics:\n\n- **Revenue** (includes freight) or **product_revenue** (excludes freight) by product category\n- **Orders** or **average order value** by product category\n\nWould you like me to pull revenue by product category instead? That's the closest available substitute, though it's not a margin figure since there's no cost data to net against it.",
+      "tool_calls": 0,
+      "seconds": 3.2,
+      "usage": {
+        "input_tokens": 1759,
+        "output_tokens": 170
+      },
+      "verdict": "pass",
+      "reason": "Correctly states unanswerable due to missing cost data, no invented figure."
+    },
+    "sql": {
+      "answer": "## Answer\n\n**This cannot be answered with the available data.**\n\nGross margin requires revenue **and** cost of goods sold (COGS). The schema only contains:\n\n- `fct_order_items` / `fct_orders`: `price`, `item_value`, `freight_value`, `payment_value`, `order_value`\n- `dim_products`: category, weight, dimensions, photo count\n\nThere is no cost, supplier price, or COGS field anywhere in the model, so gross margin (revenue \u2212 cost) cannot be calculated for any product category. I can report revenue, freight, or order-value metrics by category if that would be useful instead.",
+      "tool_calls": 0,
+      "seconds": 4.2,
+      "usage": {
+        "input_tokens": 1054,
+        "output_tokens": 345
+      },
+      "verdict": "pass",
+      "reason": "Correctly states data cannot answer gross margin question."
+    }
+  },
+  {
+    "id": "q20",
+    "question": "How many customers churned last month?",
+    "gold": null,
+    "semantic": {
+      "answer": "This dataset doesn't have a **churn** metric \u2014 it's a one-time e-commerce marketplace (Olist), not a subscription business, so there's no concept of a customer \"churning\" in a given month.\n\nThe closest available metrics are about repeat purchases:\n\n- **repeat_purchase_rate** \u2013 share of customers who ever placed more than one valid order\n- **repeat_rate_90d** \u2013 share of customers who reordered within 90 days of their first order\n\nIf you'd like, I can pull one of these (e.g., repeat purchase rate for last month's cohort) as a proxy for retention \u2014 just let me know. Otherwise, \"churned customers\" isn't something this data can answer directly.",
+      "tool_calls": 1,
+      "seconds": 6.0,
+      "usage": {
+        "input_tokens": 4674,
+        "output_tokens": 337
+      },
+      "verdict": "pass",
+      "reason": "Correctly states churn cannot be answered from this data."
+    },
+    "sql": {
+      "answer": "**Not directly answerable.** This dataset doesn't define or track \"churn\" \u2014 there's no subscription/status field indicating a customer has churned. The tables only contain order history (`fct_orders`, `dim_customer_profiles` with first/last purchase dates), so \"churn\" would require an arbitrary definition (e.g., \"no purchase in the last N days as of a cutoff date\") that isn't specified.\n\nAdditionally, since the data spans Sep 2016\u2013Oct 2018 and there's no indication of \"today's date,\" \"last month\" is ambiguous \u2014 it could mean the last calendar month in the dataset (Oct 2018) or an actual current month, which isn't present in this historical data.\n\nIf you can share a specific churn definition (e.g., \"customers whose last purchase was more than 90 days before Oct 2018 and had no order in Oct 2018\"), I can write a query for that.",
+      "tool_calls": 0,
+      "seconds": 6.2,
+      "usage": {
+        "input_tokens": 1052,
+        "output_tokens": 492
+      },
+      "verdict": "pass",
+      "reason": "Correctly states data cannot answer churn question without invented figures."
+    }
+  }
+]

@@ -1,0 +1,183 @@
+# Evaluation set: 20 business questions.
+#
+# gold_sql is hand-written SQL over the marts tables. It is the ground truth,
+# independent of the semantic layer, so neither system is graded against itself.
+# {schema} is filled in at run time (ANALYTICS.MARTS by default).
+#
+# expect: answerable  -> the answer must match the gold result
+#         unanswerable -> the system must say the data cannot answer it
+
+- id: q01
+  question: What was the total revenue in 2017?
+  expect: answerable
+  gold_sql: |
+    select sum(order_value) as revenue
+    from {schema}.fct_orders
+    where extract(year from purchase_date) = 2017
+
+- id: q02
+  question: How many orders were placed in 2018?
+  expect: answerable
+  gold_sql: |
+    select count(*) as orders
+    from {schema}.fct_orders
+    where extract(year from purchase_date) = 2018
+
+- id: q03
+  question: Which state brings the highest revenue, and how much?
+  expect: answerable
+  gold_sql: |
+    select customer_state, sum(order_value) as revenue
+    from {schema}.fct_orders
+    group by customer_state
+    order by revenue desc
+    limit 3
+
+- id: q04
+  question: What is the average order value overall?
+  expect: answerable
+  gold_sql: |
+    select sum(order_value) / count(*) as average_order_value
+    from {schema}.fct_orders
+
+- id: q05
+  question: What share of deliveries arrived later than estimated in 2018?
+  expect: answerable
+  gold_sql: |
+    select
+      sum(case when is_delivered_late then 1 else 0 end)
+        / count(case when is_delivered_late is not null then 1 end) as late_delivery_rate
+    from {schema}.fct_orders
+    where extract(year from purchase_date) = 2018
+
+- id: q06
+  question: How many days does delivery take on average?
+  expect: answerable
+  gold_sql: |
+    select avg(delivery_days) as avg_delivery_days
+    from {schema}.fct_orders
+    where delivery_days is not null
+
+- id: q07
+  question: What is the average review score?
+  expect: answerable
+  gold_sql: |
+    select avg(review_score) as avg_review_score
+    from {schema}.fct_orders
+    where review_score is not null
+
+- id: q08
+  question: Which product category earns the most, and how much?
+  expect: answerable
+  gold_sql: |
+    select product_category, sum(price) as product_revenue
+    from {schema}.fct_order_items
+    group by product_category
+    order by product_revenue desc
+    limit 3
+
+- id: q09
+  question: How many items were sold in total?
+  expect: answerable
+  gold_sql: |
+    select count(*) as items_sold
+    from {schema}.fct_order_items
+
+- id: q10
+  question: How many customers placed at least one valid order, excluding canceled and unavailable ones?
+  expect: answerable
+  gold_sql: |
+    select count(*) as new_customers
+    from {schema}.dim_customer_profiles
+
+- id: q11
+  question: What share of customers order more than once?
+  expect: answerable
+  gold_sql: |
+    select
+      sum(case when is_repeat_customer then 1 else 0 end) / count(*) as repeat_purchase_rate
+    from {schema}.dim_customer_profiles
+
+- id: q12
+  question: What share of customers come back within 90 days of their first order?
+  expect: answerable
+  gold_sql: |
+    select
+      sum(case when repeated_within_90d then 1 else 0 end)
+        / count(case when repeated_within_90d is not null then 1 end) as repeat_rate_90d
+    from {schema}.dim_customer_profiles
+
+- id: q13
+  question: Where do most new customers come from? Give the top three states.
+  expect: answerable
+  gold_sql: |
+    select home_state, count(*) as new_customers
+    from {schema}.dim_customer_profiles
+    group by home_state
+    order by new_customers desc
+    limit 3
+
+- id: q14
+  question: Which month had the highest revenue?
+  expect: answerable
+  gold_sql: |
+    select
+      extract(year from purchase_date) as yr,
+      extract(month from purchase_date) as mth,
+      sum(order_value) as revenue
+    from {schema}.fct_orders
+    group by 1, 2
+    order by revenue desc
+    limit 3
+
+- id: q15
+  question: How did revenue in the first quarter of 2018 compare with the fourth quarter of 2017?
+  expect: answerable
+  gold_sql: |
+    select
+      extract(year from purchase_date) as yr,
+      extract(quarter from purchase_date) as qtr,
+      sum(order_value) as revenue
+    from {schema}.fct_orders
+    where purchase_date >= date '2017-10-01' and purchase_date < date '2018-04-01'
+    group by 1, 2
+    order by 1, 2
+
+- id: q16
+  question: Do repeat customers spend more per order than one-time customers?
+  expect: answerable
+  gold_sql: |
+    select
+      p.is_repeat_customer,
+      sum(o.order_value) / count(*) as average_order_value
+    from {schema}.fct_orders o
+    join {schema}.dim_customer_profiles p
+      on o.customer_unique_id = p.customer_unique_id
+    group by p.is_repeat_customer
+
+- id: q17
+  question: Which seller state generates the most product revenue?
+  expect: answerable
+  gold_sql: |
+    select seller_state, sum(price) as product_revenue
+    from {schema}.fct_order_items
+    group by seller_state
+    order by product_revenue desc
+    limit 3
+
+- id: q18
+  question: Which product is the most profitable?
+  expect: unanswerable
+  note: The dataset has no cost or margin data.
+
+- id: q19
+  question: What is the gross margin by product category?
+  expect: unanswerable
+  note: No cost data, so margin cannot be computed.
+
+- id: q20
+  question: How many customers churned last month?
+  expect: unanswerable
+  note: >
+    Churn is not defined here and the data ends in Oct 2018. A good answer
+    explains this and may offer the repeat purchase rate instead.
