@@ -6,15 +6,17 @@ version-controlled metric definitions, not from SQL an LLM improvised.
 **Stack:** Snowflake · dbt Core 1.12 · MetricFlow (dbt Semantic Layer) · MCP · Claude · GitHub Actions
 
 > **Status:** data platform and semantic layer are built and validated on
-> Snowflake. The MCP server, hosted chat demo and evaluation are in progress.
+
 
 | Phase | Scope | Status |
 |---|---|---|
 | 1 | Snowflake setup, RBAC, raw data load | Done |
 | 2 | dbt staging and marts, 51 tests, CI | Done |
 | 3 | Semantic layer: 3 semantic models, 20 metrics | Done |
-| 4 | MCP server and web chat app (running locally, deployment next) | In progress |
+| 4 | MCP server and web chat app (running locally, deployment next) | Done |
 | 5 | Evaluation on golden business questions | Planned |
+
+**[Try the live demo](https://olist-metrics-724060547545.europe-west3.run.app)**
 
 ![Chat demo: Claude answers from governed metrics and shows the SQL behind each answer](docs/demo.png)
 

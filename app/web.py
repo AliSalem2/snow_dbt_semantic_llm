@@ -10,7 +10,10 @@ Run locally:  DBT_TARGET=serve uvicorn app.web:app --reload
 
 from __future__ import annotations
 
+import asyncio
+import contextlib
 import json
+import logging
 import os
 import time
 from collections import defaultdict, deque
@@ -61,7 +64,29 @@ mcp_app = server.streamable_http_app(
     transport_security=TransportSecuritySettings(enable_dns_rebinding_protection=False),
 )
 
-app = FastAPI(title="Olist metrics demo", lifespan=mcp_app.router.lifespan_context)
+@contextlib.asynccontextmanager
+async def lifespan(fastapi_app: FastAPI):
+    """Run the MCP session manager, and load the semantic layer in the background.
+
+    Loading parses the dbt project and opens the Snowflake connection, which
+    takes a few seconds. Doing it at startup means the first visitor does not
+    pay for it.
+    """
+    warmup = asyncio.create_task(_warm_up())
+    async with mcp_app.router.lifespan_context(fastapi_app):
+        yield
+    warmup.cancel()
+
+
+async def _warm_up() -> None:
+    try:
+        await run_in_threadpool(semantic.list_metrics)
+        logging.info("Semantic layer ready")
+    except Exception as exc:  # the app still starts; queries will report the error
+        logging.error("Warm-up failed: %s", exc)
+
+
+app = FastAPI(title="Olist metrics demo", lifespan=lifespan)
 client = AsyncAnthropic()  # reads ANTHROPIC_API_KEY
 
 
