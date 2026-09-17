@@ -38,6 +38,9 @@ For region or state questions about order-level metrics (revenue, orders,
 deliveries, reviews), group by olist_order__customer_state, the state where
 each order was placed. Use customer__home_state only for customer metrics
 (new_customers, repeat rates) or when the user asks about customers' home state.
+
+When a rate rests on a small sample, query its denominator metric
+(e.g. measured_deliveries) and state that number.
 """
 
 READ_ONLY = ToolAnnotations(readOnlyHint=True, idempotentHint=True, openWorldHint=False)
