@@ -33,6 +33,11 @@ For shares or percentages, query the total separately (the same metric
 without group_by) instead of summing a limited result. If no metric fits (for example profit or costs, which the data does not
 contain), say so plainly instead of approximating with another metric.
 States are Brazilian state codes (SP = Sao Paulo, RJ = Rio de Janeiro, ...).
+
+For region or state questions about order-level metrics (revenue, orders,
+deliveries, reviews), group by olist_order__customer_state, the state where
+each order was placed. Use customer__home_state only for customer metrics
+(new_customers, repeat rates) or when the user asks about customers' home state.
 """
 
 READ_ONLY = ToolAnnotations(readOnlyHint=True, idempotentHint=True, openWorldHint=False)
