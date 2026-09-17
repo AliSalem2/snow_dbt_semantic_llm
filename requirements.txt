@@ -1,3 +1,4 @@
 # Pin exact versions with `pip freeze` once everything runs.
 dbt-metricflow[dbt-snowflake]
 kaggle
+mcp>=2.2

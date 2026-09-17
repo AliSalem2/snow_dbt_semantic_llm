@@ -1,0 +1,6 @@
+{
+  "enabledMcpjsonServers": [
+    "olist-metrics"
+  ],
+  "enableAllProjectMcpServers": true
+}

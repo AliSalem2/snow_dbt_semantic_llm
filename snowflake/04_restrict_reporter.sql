@@ -1,0 +1,28 @@
+-- =====================================================================
+-- 04_restrict_reporter.sql
+-- Limit REPORTER (used by the MCP server and demo) to production schemas.
+-- Before: it could read every schema in ANALYTICS, including dev and CI,
+-- which hid a bug where the server queried dev tables.
+-- Run once in Snowsight after `dbt build --target prod`.
+-- =====================================================================
+USE ROLE SECURITYADMIN;
+
+-- Remove the database-wide access
+REVOKE SELECT ON FUTURE TABLES  IN DATABASE ANALYTICS FROM ROLE REPORTER;
+REVOKE SELECT ON FUTURE VIEWS   IN DATABASE ANALYTICS FROM ROLE REPORTER;
+REVOKE USAGE  ON FUTURE SCHEMAS IN DATABASE ANALYTICS FROM ROLE REPORTER;
+REVOKE SELECT ON ALL TABLES     IN DATABASE ANALYTICS FROM ROLE REPORTER;
+REVOKE SELECT ON ALL VIEWS      IN DATABASE ANALYTICS FROM ROLE REPORTER;
+REVOKE USAGE  ON ALL SCHEMAS    IN DATABASE ANALYTICS FROM ROLE REPORTER;
+
+-- MARTS: facts, dimensions and customer profiles
+GRANT USAGE  ON SCHEMA ANALYTICS.MARTS                   TO ROLE REPORTER;
+GRANT SELECT ON ALL TABLES    IN SCHEMA ANALYTICS.MARTS  TO ROLE REPORTER;
+GRANT SELECT ON FUTURE TABLES IN SCHEMA ANALYTICS.MARTS  TO ROLE REPORTER;
+
+-- PROD: the MetricFlow time spine
+GRANT USAGE  ON SCHEMA ANALYTICS.PROD                    TO ROLE REPORTER;
+GRANT SELECT ON ALL TABLES    IN SCHEMA ANALYTICS.PROD   TO ROLE REPORTER;
+GRANT SELECT ON FUTURE TABLES IN SCHEMA ANALYTICS.PROD   TO ROLE REPORTER;
+
+SHOW GRANTS TO ROLE REPORTER;
