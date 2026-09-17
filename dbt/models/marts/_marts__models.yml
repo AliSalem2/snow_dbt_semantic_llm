@@ -19,6 +19,72 @@ models:
       - name: product_category
         data_tests: [not_null]
 
+
+
+  - name: dim_customer_profiles
+    description: >
+      One row per customer (customer_unique_id), built from orders that were
+      not canceled or unavailable. Home state is the state of the most recent order.
+    semantic_model: true
+    agg_time_dimension: first_purchase_date
+    columns:
+      - name: customer_unique_id
+        data_tests: [unique, not_null]
+        entity:
+          type: primary
+          name: customer
+      - name: first_purchase_date
+        data_tests: [not_null]
+        granularity: day
+        dimension:
+          type: time
+      - name: home_state
+        dimension:
+          type: categorical
+      - name: is_repeat_customer
+        dimension:
+          type: categorical
+      - name: repeated_within_90d
+        description: Second order within 90 days of the first. Null if the 90-day window was not complete.
+        dimension:
+          type: categorical
+    metrics:
+      - name: new_customers
+        type: simple
+        agg: count
+        expr: customer_unique_id
+        description: Customers by the date of their first valid order (canceled and unavailable excluded).
+      - name: repeat_customers
+        type: simple
+        agg: count
+        expr: customer_unique_id
+        filter: "{{ Dimension('customer__is_repeat_customer') }} = true"
+      - name: repeat_purchase_rate
+        type: ratio
+        numerator: repeat_customers
+        denominator: new_customers
+        description: Share of customers with more than one valid order, at any time. Lower for recent cohorts.
+      - name: repeat_customers_90d
+        type: simple
+        agg: count
+        expr: customer_unique_id
+        filter: "{{ Dimension('customer__repeated_within_90d') }} = true"
+      - name: customers_with_90d_window
+        type: simple
+        agg: count
+        expr: customer_unique_id
+        filter: "{{ Dimension('customer__repeated_within_90d') }} is not null"
+      - name: repeat_rate_90d
+        type: ratio
+        numerator: repeat_customers_90d
+        denominator: customers_with_90d_window
+        description: Share of customers who ordered again within 90 days of their first order. Excludes customers whose 90-day window had not ended.
+
+
+
+
+
+
   - name: fct_orders
     description: >
       One row per order with value, payment, delivery performance and the
