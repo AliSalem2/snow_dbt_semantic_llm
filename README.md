@@ -13,8 +13,10 @@ version-controlled metric definitions, not from SQL an LLM improvised.
 | 1 | Snowflake setup, RBAC, raw data load | Done |
 | 2 | dbt staging and marts, 51 tests, CI | Done |
 | 3 | Semantic layer: 3 semantic models, 20 metrics | Done |
-| 4 | MCP server and hosted chat demo | In progress |
+| 4 | MCP server and web chat app (running locally, deployment next) | In progress |
 | 5 | Evaluation on golden business questions | Planned |
+
+![Chat demo: Claude answers from governed metrics and shows the SQL behind each answer](docs/demo.png)
 
 ## Why a semantic layer
 
