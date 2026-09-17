@@ -1,6 +1,13 @@
 {
+  "permissions": {
+    "allow": [
+      "mcp__olist-metrics__list_metrics",
+      "mcp__olist-metrics__get_dimensions",
+      "mcp__olist-metrics__query_metrics"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "olist-metrics"
-  ],
-  "enableAllProjectMcpServers": true
+  ]
 }

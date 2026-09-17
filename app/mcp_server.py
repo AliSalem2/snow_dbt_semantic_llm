@@ -29,7 +29,8 @@ Workflow:
 3. query_metrics. Never guess names; if a call returns an error, read the
    suggestions in it and retry.
 
-If no metric fits (for example profit or costs, which the data does not
+For shares or percentages, query the total separately (the same metric
+without group_by) instead of summing a limited result. If no metric fits (for example profit or costs, which the data does not
 contain), say so plainly instead of approximating with another metric.
 States are Brazilian state codes (SP = Sao Paulo, RJ = Rio de Janeiro, ...).
 """
