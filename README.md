@@ -4,6 +4,12 @@ Ask business questions in plain language and get answers computed from
 version-controlled metric definitions, not from SQL an LLM improvised.
 
 **Stack:** Snowflake · dbt Core 1.12 · MetricFlow (dbt Semantic Layer) · MCP · Claude · Cloud Run · GitHub Actions
+**[Watch the 3-minute demo]**
+
+
+https://github.com/user-attachments/assets/a19f3a30-935d-4a3b-8c17-dc3acf5a51d0
+
+
 
 **[Try the live demo](https://olist-metrics-724060547545.europe-west3.run.app)** · the first question after an idle period takes about a minute while the service starts.
 
