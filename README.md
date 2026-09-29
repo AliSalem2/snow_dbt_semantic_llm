@@ -4,8 +4,9 @@ Ask business questions in plain language and get answers computed from
 version-controlled metric definitions, not from SQL an LLM improvised.
 
 **Stack:** Snowflake · dbt Core 1.12 · MetricFlow (dbt Semantic Layer) · MCP · Claude · Cloud Run · GitHub Actions
-**[Watch the 3-minute demo]**
 
+### 2-minute walkthrough
+Silent screen recording: three questions, the SQL behind each answer, and a question the data cannot answer.
 
 https://github.com/user-attachments/assets/a19f3a30-935d-4a3b-8c17-dc3acf5a51d0
 
