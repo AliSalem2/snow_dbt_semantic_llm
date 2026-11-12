@@ -19,3 +19,6 @@ logs/
 .user.yml
 .kaggle/
 *:Zone.Identifier
+
+# local tool settings
+.claude/settings.local.json
